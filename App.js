@@ -1,24 +1,18 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from "react";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { NavigationContainer } from "@react-navigation/native";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import TabNavigator from "./src/navigation/Tabnavigator";
 
-import ChatList from './src/screens/ChatList';
-import Conversation from './src/screens/Conversation';
-
-const Stack = createNativeStackNavigator();
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="ChatList">
-        <Stack.Screen
-          name="ChatList"
-          component={ChatList}
-        />
-        <Stack.Screen
-          name="Conversation"
-          component={Conversation}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <TabNavigator />
+      </NavigationContainer>
+    </QueryClientProvider>
   );
 }
