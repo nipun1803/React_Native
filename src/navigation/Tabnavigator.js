@@ -1,8 +1,10 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
-import HomeStack from "./Homestack";
-import SettingsScreen from "../screens/SettingsScreen";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import ChatListScreen from '../screens/ChatListScreen';
+import UsersScreen from '../screens/UsersScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import { COLORS } from '../constants/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -10,33 +12,48 @@ export default function TabNavigator() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: "#2563eb",
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.textMuted,
+        tabBarStyle: {
+          backgroundColor: COLORS.surface,
+          borderTopColor: COLORS.border,
+          borderTopWidth: 1,
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 6,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
         tabBarIcon: ({ color, size, focused }) => {
-          const icons = {
-            HomeTab: focused ? "home" : "home-outline",
-            SettingsTab: focused ? "settings" : "settings-outline",
-          };
-          return (
-            <Ionicons name={icons[route.name]} size={size} color={color} />
-          );
+          let iconName = 'chatbubbles';
+          if (route.name === 'ChatsTab') {
+            iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
+          } else if (route.name === 'UsersTab') {
+            iconName = focused ? 'people' : 'people-outline';
+          } else if (route.name === 'ProfileTab') {
+            iconName = focused ? 'person-circle' : 'person-circle-outline';
+          }
+          return <Ionicons name={iconName} size={size + 2} color={color} />;
         },
       })}
     >
-      {/* Tab 1: contains its own stack, so it hides its own header */}
       <Tab.Screen
-        name="HomeTab"
-        component={HomeStack}
-        options={{ title: "Home", headerShown: false }}
+        name="ChatsTab"
+        component={ChatListScreen}
+        options={{ title: 'Chats', headerShown: false }}
       />
-      {/* Tab 2: a plain screen */}
       <Tab.Screen
-        name="SettingsTab"
-        component={SettingsScreen}
-        options={{ title: "Settings Mione", headerShown: false }}
+        name="UsersTab"
+        component={UsersScreen}
+        options={{ title: 'Users', headerShown: false }}
+      />
+      <Tab.Screen
+        name="ProfileTab"
+        component={ProfileScreen}
+        options={{ title: 'Profile', headerShown: false }}
       />
     </Tab.Navigator>
   );
 }
-
-// Got an invalid value for 'component' prop for the screen
-// 'Homelab'.It must be a valid React Component./
